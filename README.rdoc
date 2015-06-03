@@ -1,0 +1,1 @@
+Purpose: Visualize annual patent data of top 100 innovators defined by Reuters using D3.js. Annual data since 2002 is obtained from by U.S. Patent and Trademark Office's official site. 
