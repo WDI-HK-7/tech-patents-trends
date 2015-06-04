@@ -28,19 +28,8 @@ ActiveRecord::Schema.define(version: 20150604030743) do
 
   create_table "patents", force: :cascade do |t|
     t.string   "company_full_name"
-    t.integer  "yr2014"
-    t.integer  "yr2013"
-    t.integer  "yr2012"
-    t.integer  "yr2011"
-    t.integer  "yr2010"
-    t.integer  "yr2009"
-    t.integer  "yr2008"
-    t.integer  "yr2007"
-    t.integer  "yr2006"
-    t.integer  "yr2005"
-    t.integer  "yr2004"
-    t.integer  "yr2003"
-    t.integer  "yr2002"
+    t.integer  "patent_number"
+    t.integer  "year"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.integer  "company_id"
