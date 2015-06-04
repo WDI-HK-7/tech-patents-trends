@@ -4,8 +4,8 @@ class CreateCompanies < ActiveRecord::Migration
       t.string  :name        
       t.string  :country
       t.string  :industry
-      t.integer :total_employee
-      t.integer :engineers
+      t.integer :employees_num
+      t.integer :engineers_num
       t.timestamps null: false
     end
   end
