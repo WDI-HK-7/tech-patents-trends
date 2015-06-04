@@ -20,15 +20,15 @@ ActiveRecord::Schema.define(version: 20150604030743) do
     t.string   "name"
     t.string   "country"
     t.string   "industry"
-    t.integer  "total_employee"
-    t.integer  "engineers"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.integer  "employees_num"
+    t.integer  "engineers_num"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "patents", force: :cascade do |t|
     t.string   "company_full_name"
-    t.integer  "patent_number"
+    t.integer  "patent_num"
     t.integer  "year"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false

@@ -2,7 +2,7 @@ class CreatePatents < ActiveRecord::Migration
   def change
     create_table :patents do |t|
       t.string :company_full_name
-      t.integer :patent_number
+      t.integer :patent_num
       t.integer :year
       t.timestamps null: false
     end
