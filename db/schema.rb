@@ -1,0 +1,52 @@
+# encoding: UTF-8
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended that you check this file into your version control system.
+
+ActiveRecord::Schema.define(version: 20150604030743) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "companies", force: :cascade do |t|
+    t.string   "name"
+    t.string   "country"
+    t.string   "industry"
+    t.integer  "total_employee"
+    t.integer  "engineers"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  create_table "patents", force: :cascade do |t|
+    t.string   "company_full_name"
+    t.integer  "yr2014"
+    t.integer  "yr2013"
+    t.integer  "yr2012"
+    t.integer  "yr2011"
+    t.integer  "yr2010"
+    t.integer  "yr2009"
+    t.integer  "yr2008"
+    t.integer  "yr2007"
+    t.integer  "yr2006"
+    t.integer  "yr2005"
+    t.integer  "yr2004"
+    t.integer  "yr2003"
+    t.integer  "yr2002"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "company_id"
+  end
+
+  add_index "patents", ["company_id"], name: "index_patents_on_company_id", using: :btree
+
+  add_foreign_key "patents", "companies"
+end
