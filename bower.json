@@ -1,5 +1,5 @@
 {
-  "name" : "tech-patent-trends",
+  "name" : "tech-patents-trends",
   "version": "0.1",
   "dependencies": {
     "angular": "~1.3.15",
