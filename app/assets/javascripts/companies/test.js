@@ -3,7 +3,7 @@ $(document).ready( function(){
 
 
   // Chart dimensions.
-  var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5},
+  var margin = {top: 45.5, right:40.5, bottom: 19.5, left: 42.5},
       width = 960 - margin.right,
       height = 500;
 
@@ -19,6 +19,7 @@ $(document).ready( function(){
   d3.json("/companies", function(company_data){
     d3.json("/patents", function(patnum_all_years){
       console.log(company_data);
+      console.log(d3.extent(company_data, function(d) { return d.engineers_num}));
       // Various accessors that specify the four dimensions of data to visualize.
       function x(d) { return d.employees };
       function y(d) { return d.engineers };
@@ -32,11 +33,11 @@ $(document).ready( function(){
 
       // Various scales. These domains make assumptions of data, naturally.
       var xScale = d3.scale.linear().domain(d3.extent(company_data, function(d){ return d.employees_num})).range([0, width]),
-        yScale = d3.scale.linear().domain(d3.extent(patnum_all_years, function(d){ return d.patent_num})).range([height, 0])
+        yScale = d3.scale.linear().domain(d3.extent(company_data, function(d){ return d.engineers_num})).range([height, 0])
 
       // The x & y axes.
       var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d")).tickSize(1),
-        yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(1);  
+        yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(12, d3.format(",d")).tickSize(1);  
 
       var test = [
         {name: 1, x: 30000, can: 300},
@@ -52,7 +53,7 @@ $(document).ready( function(){
         .enter().append("circle")
           .attr("class", "dot")
           .style("fill", function(d) { return colorScale(color(d)); })
-          .call(position)
+          .call(positionTest)
           //shows name of company upon hover over
           .on('mouseover', function(d) {
             d3.select(this.parentElement).select('title').style('opacity', 1)
@@ -65,17 +66,25 @@ $(document).ready( function(){
 
       function positionTest(dot) {
         dot .attr("cx", function(d) {
-          return xScale(d.engineers)
+          console.log (x(d));
+          return xScale(x(d));
+        })
+        .attr("cy", function(d) {
+          console.log(y(d));
+          return yScale(y(d));
+        })
+        .attr("r", function(d) {
+          console.log(radius(d));
+          return radiusScale(radius(d));
         })
       }
 
       // Positions the dots based on data.
       function position(dot) {
-        dot .attr("cx", d.engineer_num 
-          function(d) { 
+        dot .attr("cx", function(d) { 
           // console.log("cx is " + xScale(x(d)) );
           // return xScale(x(d)); 
-          return d.engineers_num;
+          return xScale(d.engineers_num);
         } )
         .attr("cy", function(d) { return yScale(d.employees_num) })
         .attr("r", 10
@@ -93,8 +102,8 @@ $(document).ready( function(){
             name: d.name,
             region: d.country,
             industry: d.industry,
-            employees_num: d.employees_num, 
-            engineers_num: d.engineers_num
+            employees: d.employees_num, 
+            engineers: d.engineers_num
           })
         })
       };
