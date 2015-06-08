@@ -12,4 +12,8 @@ class CompaniesController < ApplicationController
   def company_params
     params.require(:company).permit(:name, :country, :industry)
   end
+  
+  def test
+    @companies = Company.all
+  end
 end
