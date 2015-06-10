@@ -17,8 +17,8 @@ $(document).ready(function(){
     colorScale = d3.scale.category10();
 
   // Various scales. These domains make assumptions of data, naturally.
-  var xScale = d3.scale.linear().domain([40, 80000]).range([0, width]),
-    yScale = d3.scale.linear().domain([0, 500]).range([height, 0]);
+  var xScale = d3.scale.linear().domain([40, 130000]).range([0, width]),
+    yScale = d3.scale.linear().domain([0, 2100]).range([height, 0]);
 
   // The x & y axes.
   var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(12, d3.format(",d")).tickSize(1),
@@ -126,8 +126,9 @@ $(document).ready(function(){
       // console.log(radiusScale(radius(d)));
       return radiusScale(radius(d));
     });
-    animation();
   };    
+  
+  animation();
 
   function animation () {
     // Add the year label; the value is set on transition.
@@ -189,9 +190,9 @@ $(document).ready(function(){
         // (this) refers to .attr(rect), .class(overlay)
         //d3.mouse(countainer) => returns the [x,y] coordinates as an array 
         //.invert() => returns the input domain x for the corresponding value in the output range y. 
-        // return function(t) {displayYear(rounded_year(t))};
         console.log(rounded_year);
         label.text(rounded_year); 
+        displayYear(rounded_year);
       };
     };
 
@@ -199,7 +200,7 @@ $(document).ready(function(){
     // For the interpolated data, the dots and label are redrawn.
     function tweenYear() {
       var year = d3.interpolateRound(2012, 2014); //target the year => works but runs 1800+ times from 2012-2014
-      return function(t) {console.log(year(t))};
+      // return function(t) {console.log(year(t))};
       // return displayYear(year); //send year to displayYear function 
     //   };
     }
@@ -208,7 +209,7 @@ $(document).ready(function(){
     function displayYear(year) {
       // console.log("/companies?year=" + year)
       d3.json("/companies?year=" + year, function(company_data){
-        // console.log(company_data);
+        console.log(company_data);
         dot.data(interpolateData(company_data)).call(position)
       });
       console.log(year);
