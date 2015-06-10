@@ -59,15 +59,34 @@ $(document).ready(function(){
     .attr("transform", "rotate(-90)")
     .text("total number of patent per year");
 
-  //declaring dot as a global variable 
+  //on hover over on the bar, the year increases by increment from 2002 to 2014; 
+  var year = 2014
+
   var dot;
 
-  //loading data from db
-  d3.json("/companies?year=" + year, function(company_data){
-    // console.log(company_data);
-    createDot(company_data);
-  });
+  // $('#submit').click(function(){
+  //   // $('#charts').html('');
+  //   // $('g').remove();
+  //   $('circle').remove();
+  //   $('text').remove();
+  //   var year = $('#year').val();
+  //   console.log(year);
+  //   // rendering data in json
+  //   d3.json("/companies?year=" + year, function(company_data){
+  //     // console.log(company_data);
+  //     dot_and_axes(company_data);
 
+  //     //closing companies.json
+  //   });
+  //   $('#year').val('');
+  // });
+  
+  d3.json("/companies?year=" + year, function(company_data){
+      // console.log(company_data);
+      createDot(company_data);
+
+      //closing companies.json
+  });
   //function that gets called upon every time the year variable changes
   function createDot(yearly_company_data){
     // console.log(yearly_company_data);
@@ -90,6 +109,7 @@ $(document).ready(function(){
     // Add a title to each dot.
     dot.append("title")
       .text(function(d) { return d.name });
+
   };
 
   //plot the dots based on position of the data and radius according to engineers_num
@@ -106,7 +126,7 @@ $(document).ready(function(){
       // console.log(radiusScale(radius(d)));
       return radiusScale(radius(d));
     });
-    // animation();
+    animation();
   };    
 
   function animation () {
@@ -116,7 +136,7 @@ $(document).ready(function(){
       .attr("text-anchor", "end")
       .attr("y", height - 24)
       .attr("x", width) // picked up from global variable width 
-      .text(2002);
+      .text(2012);
 
     // Add an overlay for the year label.
     var box = label.node().getBBox();
@@ -128,22 +148,22 @@ $(document).ready(function(){
           .attr("width", box.width)
           .attr("height", box.height)
           .on("mouseover", enableInteraction);
-          console.log(box.x, box.width)
+          // console.log(box.x, box.width);
 
     // Start a transition that interpolates the data based on year.
     svg.transition()
         .duration(30000)
         .ease("linear")
-        // .tween("year", tweenYear)
+        .tween
         .each("end", enableInteraction);
     
     // After the transition finishes, you can mouseover to change the year.
     function enableInteraction() {
       var yearScale = d3.scale.linear()
-          .domain([2002, 2014])
+          .domain([2012, 2014])
           .range([box.x + 430, box.x + 20])
           .clamp(true);
-          console.log("box works")
+          console.log("box works");
     
       // Cancel the current transition, if any.
       svg.transition().duration(0);
@@ -163,55 +183,36 @@ $(document).ready(function(){
       };
 
       function mousemove() {
+        // d3.interpolateNumber(2012, 2014);
         var rounded_year = d3.round( yearScale.invert(d3.mouse(this)[0]) )
-        label.text(rounded_year);  
-        displayYear(rounded_year);
-
-        console.log(rounded_year);
+        return function(t) {displayYear(rounded_year(t))};
+        // console.log(rounded_year);
       };
     };
 
     // Tweens the entire chart by first tweening the year, and then the data.
     // For the interpolated data, the dots and label are redrawn.
     function tweenYear() {
-      var year = d3.interpolateNumber(2002, 2014);
-      console.log("tween year:" + year);
-      // return function(t) { displayYear(year(t)); };
+      var year = d3.interpolateRound(2012, 2014);
+      return displayYear(year); 
+    //   };
     }
 
     // Updates the display to show the specified year.
     function displayYear(year) {
-      console.log("/companies?year=" + year)
+      // console.log("/companies?year=" + year)
       d3.json("/companies?year=" + year, function(company_data){
-        console.log(company_data);
-        // d3.select("svg").remove();
-        // createDot(company_data);
-        // svg.selectAll("circle").remove();
-
-        // Add a dot per nation. Initialize the data at 2002, and set the colors.
-        // svg.append("g")
-        //   .attr("class", "dots")
-        // .selectAll(".dot")       
-        //   .data(interpolateData(company_data)) //picking up because it shows 5 dots but can't put two sets of data because they will overwrite each other. 
-        // .enter().append("circle")
-        //   .attr("class", "dot")
-        //   .style("fill", function(d) { return colorScale(color(d)); })
-        //   .call(position)
-        //   //shows name of company upon hover over
-        //   .on('mouseover', function(d) {
-        //     d3.select(this.parentElement).select('title').style('opacity', 1)
-        //   });
-        //closing companies.json
+        // console.log(company_data);
         dot.data(interpolateData(company_data)).call(position)
-        label.remove();
-        label.text(Math.round(1000));
       });
+      label.text(year);  
     }
   };
 
 
   //database data in d3 form 
   function interpolateData(yearly_company_data) {
+    // console.log(yearly_company_data);
     return yearly_company_data.map(function(d){
       return ({
         name: d.name,
@@ -220,7 +221,7 @@ $(document).ready(function(){
         employees: d.employees_num, 
         engineers: d.engineers_num,
         patents:d.patent_num,
-        year: d.year
+        year: d.year   
       });
     });
   };

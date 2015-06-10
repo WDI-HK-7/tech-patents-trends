@@ -1,9 +1,6 @@
-// .label {
-//   font: 500 196px "Helvetica Neue";
-//   fill: black;
-// }
-
-
+.dot {
+  opacity: 0.7;
+}
 .label {
   fill: #777;
 }
@@ -20,4 +17,9 @@
 .overlay {
   fill: white;
   opacity: 0;
+}
+.overlay {
+  fill: none;
+  pointer-events: all;
+  cursor: ew-resize;
 }
