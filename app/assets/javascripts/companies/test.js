@@ -136,7 +136,7 @@ $(document).ready(function(){
       .attr("text-anchor", "end")
       .attr("y", height - 24)
       .attr("x", width) // picked up from global variable width 
-      .text(2012);
+      .text(2002);
 
     // Add an overlay for the year label.
     var box = label.node().getBBox();
@@ -154,14 +154,14 @@ $(document).ready(function(){
     svg.transition()
         .duration(30000)
         .ease("linear")
-        .tween
+        .tween("year", tweenYear)
         .each("end", enableInteraction);
     
     // After the transition finishes, you can mouseover to change the year.
     function enableInteraction() {
       var yearScale = d3.scale.linear()
-          .domain([2012, 2014])
-          .range([box.x + 430, box.x + 20])
+          .domain([2002, 2014])
+          .range([box.x + 420, box.x + 20])
           .clamp(true);
           console.log("box works");
     
@@ -182,19 +182,25 @@ $(document).ready(function(){
         label.classed("active", false);
       };
 
+      //unseen changing what label year changes 
       function mousemove() {
         // d3.interpolateNumber(2012, 2014);
         var rounded_year = d3.round( yearScale.invert(d3.mouse(this)[0]) )
-        return function(t) {displayYear(rounded_year(t))};
-        // console.log(rounded_year);
+        // (this) refers to .attr(rect), .class(overlay)
+        //d3.mouse(countainer) => returns the [x,y] coordinates as an array 
+        //.invert() => returns the input domain x for the corresponding value in the output range y. 
+        // return function(t) {displayYear(rounded_year(t))};
+        console.log(rounded_year);
+        label.text(rounded_year); 
       };
     };
 
     // Tweens the entire chart by first tweening the year, and then the data.
     // For the interpolated data, the dots and label are redrawn.
     function tweenYear() {
-      var year = d3.interpolateRound(2012, 2014);
-      return displayYear(year); 
+      var year = d3.interpolateRound(2012, 2014); //target the year => works but runs 1800+ times from 2012-2014
+      return function(t) {console.log(year(t))};
+      // return displayYear(year); //send year to displayYear function 
     //   };
     }
 
@@ -205,6 +211,7 @@ $(document).ready(function(){
         // console.log(company_data);
         dot.data(interpolateData(company_data)).call(position)
       });
+      console.log(year);
       label.text(year);  
     }
   };
