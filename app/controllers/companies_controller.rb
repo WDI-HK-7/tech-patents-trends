@@ -1,6 +1,7 @@
 class CompaniesController < ApplicationController
   def index
-    @companies = Company.all
+    @companies = Company.all.includes(:patents) 
+    #access the patent tables and load the data from here.
   end
   def show
     @company = Company.find(params[:id])
@@ -14,6 +15,6 @@ class CompaniesController < ApplicationController
   end
   
   def test
-    @companies = Company.all
+    # @companies = Company.all
   end
 end

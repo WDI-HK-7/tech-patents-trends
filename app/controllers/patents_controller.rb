@@ -1,6 +1,6 @@
 class PatentsController < ApplicationController
   def index
-    @patents = Patent.all
+    @patents = Patent.order(:company_id)
   end
   def show
     @patent = Patent.find(params[:id])

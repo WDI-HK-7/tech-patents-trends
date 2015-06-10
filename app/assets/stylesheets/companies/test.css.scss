@@ -1,0 +1,25 @@
+.dot {
+  opacity: 0.7;
+}
+.label {
+  fill: #777;
+}
+
+.year.label {
+  font: 100 196px "Helvetica Neue";
+  fill: #ddd;
+}
+
+.year.label.active {
+  fill: #aaa;
+}
+
+.overlay {
+  fill: white;
+  opacity: 0;
+}
+.overlay {
+  fill: none;
+  pointer-events: all;
+  cursor: ew-resize;
+}
